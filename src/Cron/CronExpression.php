@@ -225,20 +225,13 @@ class CronExpression
      *                                           current date if it matches the cron expression
      * @param null|string      $timeZone         TimeZone to use instead of the system default
      *
-     * @return array Returns an array of run dates
+     * @return \Generator Returns a generator of run dates
      */
     public function getMultipleRunDates($total, $currentTime = 'now', $invert = false, $allowCurrentDate = false, $timeZone = null)
     {
-        $matches = array();
         for ($i = 0; $i < max(0, $total); $i++) {
-            try {
-                $matches[] = $this->getRunDate($currentTime, $i, $invert, $allowCurrentDate, $timeZone);
-            } catch (RuntimeException $e) {
-                break;
-            }
+            yield $this->getRunDate($currentTime, $i, $invert, $allowCurrentDate, $timeZone);
         }
-
-        return $matches;
     }
 
     /**
